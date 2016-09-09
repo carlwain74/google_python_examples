@@ -41,6 +41,32 @@ def extract_names(filename):
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
   # +++your code here+++
+  names = {}
+
+  print "Processing filename: ", filename
+
+  file = open(filename, 'r')
+  
+  # Find the year string
+  strings = re.findall(r'Popularity\sin\s(\d\d\d\d)', file.read())
+  year = strings[0]
+  file.close()
+  
+  print "Year: ", year
+ 
+  # Search for names
+  with open(filename, 'r') as file:
+      for line in file:
+        #print line,
+        match = re.search(r'<td>(\d+)<\/td><td>(\w+)<\/td><td>(\w+)<\/td>', line)
+        
+        if match:
+          #print("Position: %s; Boy: %s; Girl: %s" % (match.group(1), match.group(2), match.group(2)))
+          names[match.group(1)] = match.group(2, 3)
+
+  for key in sorted(names.keys()):
+    print key, names[key]
+
   return
 
 
@@ -63,6 +89,8 @@ def main():
   # +++your code here+++
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
-  
+  for arg in args:
+    extract_names(arg)
+
 if __name__ == '__main__':
   main()
